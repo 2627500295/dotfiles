@@ -1,0 +1,46 @@
+[core]
+	editor = vim
+[pull]
+	ff = only
+[push]
+	default = current
+[alias]
+	amend = commit --amend
+	br = branch
+	brd = branch -d
+	brD = branch -D
+	brname = rev-parse --abbrev-ref @
+	ci = commit
+	cia = commit -avv
+	cim = commit -m
+	cin = commit -n
+	civ = commit -vv
+	cl = clone --depth 1
+	co = checkout
+	cob = checkout -b
+	diffs = diff --staged
+	hash = rev-parse @
+	hashs = rev-parse --short @
+	l = log --oneline
+	lg = log --oneline --graph
+	pullf = !git fetch && git reset --hard @{u}
+	pullr = pull --rebase origin master
+	pushbr = push --no-verify -u
+	pushf = push --force-with-lease
+	pushfn = push --force-with-lease --no-verify
+	pushn = push --no-verify
+	rb = rebase
+	rbi = rebase -i
+	rbc = rebase --continue
+	rba = rebase --abort
+	sm = submodule
+	smadd = submodule add --depth 1
+	st = status
+	temp = commit -nm temp
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[init]
+	defaultBranch = master
