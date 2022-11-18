@@ -1,16 +1,23 @@
 #!/bin/sh
 
+system_type=$(uname -s)
+
+
 if ! command -v brew >/dev/null 2>&1; then
   echo "Installing homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | sed '/command_as_root$/d')"
-  echo "Setup homebrew"
-  echo ''                                               >> ${HOME}/.zshrc
-  echo '# Homebrew'                                     >> ${HOME}/.zshrc
-  echo '# -------------------------------'              >> ${HOME}/.zshrc
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'      >> ${HOME}/.zshrc
 
-  if [ "$SHELL" = "bash"]; then
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'      >> ${HOME}/.bashrc
+  echo "Setup homebrew"
+  echo ''                                                               >> ${HOME}/.zshrc
+  echo '# Homebrew'                                                     >> ${HOME}/.zshrc
+  echo '# -------------------------------'                              >> ${HOME}/.zshrc
+
+  if [ "$system_type" = "Darwin" ]; then
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'                    >> ${HOME}/.zshrc
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'                    >> ${HOME}/.bashrc
+  elif [ "$system_type" = "Linux" ]; then
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'       >> ${HOME}/.zshrc
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'       >> ${HOME}/.bashrc
   fi
 fi
 
@@ -28,8 +35,14 @@ brew tap openresty/brew
 brew tap shivammathur/php
 
 
-echo "Updating homebrew bundle"
-eval "$(/opt/homebrew/bin/brew shellenv)"
+
+if [ "$system_type" = "Darwin" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ "$system_type" = "Linux" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+echo "Install universal utilities"
 brew install \
   helm \
   kubectl \
@@ -55,7 +68,6 @@ brew install \
   tmux
 
 
-system_type=$(uname -s)
 if [ "$system_type" = "Darwin" ]; then
   echo "Install macOS applications"
   brew install --cask \
