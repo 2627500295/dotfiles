@@ -1,17 +1,17 @@
 #!/bin/sh
 
-if ! command -v brew >/dev/null 2>&1; then 
-  echo 'no exists brew' 
-fi
-
 if ! command -v brew >/dev/null 2>&1; then
   echo "Installing homebrew"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | sed 's/check_run_command_as_root$//g')"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | sed '/command_as_root$/d')"
   echo "Setup homebrew"
   echo ''                                               >> ${HOME}/.zshrc
   echo '# Homebrew'                                     >> ${HOME}/.zshrc
   echo '# -------------------------------'              >> ${HOME}/.zshrc
   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'      >> ${HOME}/.zshrc
+
+  if [ "$SHELL" = "bash"]; then
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'      >> ${HOME}/.bashrc
+  fi
 fi
 
 echo "Homebrew Taps"
