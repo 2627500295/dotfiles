@@ -14,7 +14,7 @@ curl \
     -s \
     clone \
     --recurse-submodules \
-      ssh://git@github.com/2627500295/dotfiles
+      github.com/2627500295/dotfiles
       -f
 ```
 
