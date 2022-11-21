@@ -23,11 +23,13 @@ alias allproxy="\
 "
 alias proxychains4="proxychains4 -q"
 
+export ZSH_CACHE_DIR=$HOME/.zi
+
 
 # Homebrew
 # -------------------------------
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export HOMEBREW_NO_AUTO_UPDATE=1
+#eval "$(/usr/local/bin/brew shellenv)"
+#export HOMEBREW_NO_AUTO_UPDATE=1
 
 
 # ZI
@@ -35,12 +37,20 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
+zicompinit
 
 zi light-mode for \
     z-shell/z-a-meta-plugins \
     @annexes @zunit
 
 zi pack for ls_colors
+
+zi wait pack atload=+"zicompinit; zicdreplay" for system-completions
+
+zi ice lucid wait='0'
+zi light zsh-users/zsh-completions
+
+zi wait pack for brew-completions
 
 zi wait lucid for \
     OMZL::functions.zsh \
@@ -59,24 +69,30 @@ zi wait lucid for \
     OMZL::termsupport.zsh
 
 zi wait lucid for \
+    OMZ::lib/completion.zsh \
+    OMZ::lib/history.zsh \
     OMZP::colored-man-pages \
     OMZP::extract \
     OMZP::fasd \
     OMZP::git \
     OMZP::gitignore \
     OMZP::mosh \
-    OMZP::screen
+    OMZP::screen \
+    has'kubectl' OMZP::kubectl \
+    has'helm' OMZP::helm
 
-zi wait pack atload=+"zicompinit; zicdreplay" for system-completions
+
+
+zi load zsh-users/zsh-autosuggestions
 
 
 # P10K
 # -------------------------------
-zi depth'1' light-mode for atload'source ~/.p10k.zsh' romkatv/powerlevel10k
 POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+zi depth'1' light-mode for atload'source ~/.p10k.zsh' romkatv/powerlevel10k
 
 
 # Rust
@@ -91,21 +107,23 @@ export rime_dir="$HOME/Library/Rime"
 export plum_dir="${rime_dir}/plum"
 
 
-# Kubectl
-# -------------------------------
-export KUBE_EDITOR="nvim"
-source <(kubectl completion zsh)
-alias k=kubectl
-alias kc=kubectl
-complete -o default -F __start_kubectl k
-complete -o default -F __start_kubectl kc
+# # Kubectl
+# # -------------------------------
+# export KUBE_EDITOR="nvim"
+# source <(kubectl completion zsh)
+# alias k=kubectl
+# alias kc=kubectl
+# complete -o default -F __start_kubectl k
+# complete -o default -F __start_kubectl kc
 
 
-# Helm
-# -------------------------------
-source <(helm completion zsh)
+# # Helm
+# # -------------------------------
+# source <(helm completion zsh)
 
 
 # N
 # -------------------------------
 export N_NODE_MIRROR=https://npmmirror.com/mirrors/node
+
+
